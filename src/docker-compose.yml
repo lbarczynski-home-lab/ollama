@@ -4,6 +4,12 @@ services:
     container_name: ollama
     hostname: ollama.ctr.xbhl.intranet
     tty: true
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'cat < /dev/null > /dev/tcp/localhost/11434 && ollama --version && ollama ps || exit 1'"]
+      start_period: 5s
+      interval: 15s
+      timeout: 10s
+      retries: 5
     ports:
       - "11434:11434"
     volumes:
