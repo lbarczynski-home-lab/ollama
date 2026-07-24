@@ -1,0 +1,36 @@
+services:
+  ollama:
+    image: ollama/ollama:0.32.3
+    container_name: ollama
+    hostname: ollama.ctr.xbhl.intranet
+    tty: true
+    ports:
+      - "11434:11434"
+    volumes:
+      - data:/root/.ollama
+    networks:
+      - proxy
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ollama-router.rule=Host(`${OLLAMA_DOMAIN:?err}`)"
+      - "traefik.http.routers.ollama-router.entrypoints=websecure"
+      - "traefik.http.routers.ollama-router.tls=true"
+      - "traefik.http.routers.ollama-router.service=ollama"
+      - "traefik.http.services.ollama.loadbalancer.server.port=11434"
+      - "traefik.docker.network=proxy"
+    restart: unless-stopped
+
+volumes:
+  data:
+    driver: local
+
+networks:
+  proxy:
+    external: true

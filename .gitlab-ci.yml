@@ -1,0 +1,32 @@
+stages:
+  - .pre
+  - test
+  - deploy
+  - verify
+  - .post
+
+variables:
+  OLLAMA_DOMAIN: "ollama.intranet.xbhl.online"
+
+include:
+  - component: $CI_SERVER_FQDN/home-lab/automations/docker-compose-service-deployment@v2.0.3
+    inputs:
+      vm-hostname: nas.srv.xbhl.intranet
+      vm-ssh-username: $SSH_USER
+      vm-ssh-private-key: $SSH_PRIVATE_KEY
+      service-name: ollama
+      container-name: ollama
+      container-location: /share/Container/services/ollama
+      cloudflare-dns-entry-name: $OLLAMA_DOMAIN
+      cloudflare-zone-id: $CLOUDFLARE_ZONE_ID
+      cloudflare-dns-api-token: $CLOUDFLARE_DNS_API_TOKEN
+      delete-existing-container-files: true
+
+setup:generate-build-artifacts:
+  script:
+    - cp src/.env $BUILD_ARTIFACTS_DIR
+    - sed -i "s|^OLLAMA_DOMAIN=.*|OLLAMA_DOMAIN=${OLLAMA_DOMAIN}|" $BUILD_ARTIFACTS_DIR/.env
+
+test:ollama:docker-compose:
+  script:
+    - echo "🔵 Skipping docker-compose test due to lack of NVIDIA GPU in runner environment"
