@@ -31,6 +31,9 @@ services:
       - "traefik.http.routers.ollama-router.service=ollama"
       - "traefik.http.services.ollama.loadbalancer.server.port=11434"
       - "traefik.docker.network=proxy"
+      - 'wud.watch=true'
+      - 'wud.tag.include=^\d+\.\d+\.\d+$$'
+      - "wud.link.template=https://github.com/ollama/ollama/releases/tag/v$${major}.$${minor}.$${patch}"
     restart: unless-stopped
 
 volumes:
