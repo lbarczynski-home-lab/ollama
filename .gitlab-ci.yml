@@ -1,15 +1,8 @@
-stages:
-  - .pre
-  - test
-  - deploy
-  - verify
-  - .post
-
 variables:
   OLLAMA_DOMAIN: "ollama.intranet.xbhl.online"
 
 include:
-  - component: $CI_SERVER_FQDN/home-lab/automations/docker-compose-service-deployment@v2.0.3
+  - component: $CI_SERVER_FQDN/home-lab/automations/docker-compose-service-deployment@v2.0.5
     inputs:
       vm-hostname: nas.srv.xbhl.intranet
       vm-ssh-username: $SSH_USER
