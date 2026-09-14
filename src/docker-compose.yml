@@ -1,6 +1,6 @@
 services:
   ollama:
-    image: ollama/ollama:0.33.2
+    image: ollama/ollama:0.34.0
     container_name: ollama
     hostname: ollama.ctr.xbhl.intranet
     tty: true
@@ -32,6 +32,8 @@ services:
       - "traefik.http.services.ollama.loadbalancer.server.port=11434"
       - "traefik.docker.network=proxy"
       - 'wud.watch=true'
+      - 'wud.display.name=Ollama'
+      - 'wud.display.icon=si:ollama'
       - 'wud.tag.include=^\d+\.\d+\.\d+$$'
       - "wud.link.template=https://github.com/ollama/ollama/releases/tag/v$${major}.$${minor}.$${patch}"
     restart: unless-stopped
