@@ -1,9 +1,8 @@
 services:
   ollama:
-    image: ollama/ollama:0.34.0
+    image: ollama/ollama:0.35.1
     container_name: ollama
     hostname: ollama.ctr.xbhl.intranet
-    tty: true
     healthcheck:
       test: ["CMD-SHELL", "bash -c 'cat < /dev/null > /dev/tcp/localhost/11434 && ollama --version && ollama ps || exit 1'"]
       start_period: 5s
